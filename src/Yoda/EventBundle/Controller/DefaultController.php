@@ -6,14 +6,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    public function indexAction($name, $count)
+    public function indexAction($count, $firstName)
     {
-       // $templating = $this->container->get('templating');
+        // these 2 lines are equivalent
+        // $em = $this->container->get('doctrine')->getManager();
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('EventBundle:Event');
+
+        $event = $repo->findOneBy(array(
+                'name' => 'Darth\'s surprise birthday party',
+            ));
+
         return $this->render(
             'EventBundle:Default:index.html.twig',
-            array('name' => $name)
+            array(
+                'name' => $firstName,
+                'count' => $count,
+                'event'=> $event,
+            )
         );
-
-
     }
 }
