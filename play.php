@@ -2,7 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
-
+use Yoda\EventBundle\Entity\Event;
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
 umask(0000);
@@ -23,6 +23,12 @@ $container = $kernel->getContainer();
 $container->enterScope('request');
 $container->set('request', $request);
 
+$event = new Event();
+$event->setName('Darth\'s surprise birthday party2');
+$event->setLocation('Deathstar');
+$event->setTime(new \DateTime('tomorrow noon'));
+$event->setDetails('Ha! Darth HATES surprises!!!!');
+
 // all our setup is done!!!!!!
 $templating = $container->get('templating');
 
@@ -31,20 +37,14 @@ echo $templating->render(
     array(
         'name' => 'Yoda',
         'count' => 5,
+        'event' => $event,
     )
 );
 
-use Yoda\EventBundle\Entity\Event;
 
 
-$event = new Event();
-$event->setName('Darth\'s surprise birthday party');
-$event->setLocation('Deathstar');
-$event->setTime(new \DateTime('tomorrow noon'));
-$event->setDetails('Ha! Darth HATES surprises!!!!');
-
-$em = $container->get('doctrine')->getManager();
-
-$em = $container->get('doctrine')->getManager();
-$em->persist($event);
-$em->flush();
+// Entity manager. In charge of saveing objects and fetching them.
+//$em = $container->get('doctrine')->getManager();
+//// 2 steps. Per
+//$em->persist($event);
+//$em->flush();
